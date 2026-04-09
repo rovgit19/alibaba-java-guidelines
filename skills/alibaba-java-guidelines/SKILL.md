@@ -62,15 +62,38 @@ Before reading the full reference, internalize these high-impact rules:
 - Streams: keep pipelines ≤3-4 ops. Use `toList()` (Java 16+). Complex logic → use loop
 - Bean Validation (`@Valid` + `@NotNull`/`@NotBlank`) on Controller inputs
 - Domain exception hierarchy + `@RestControllerAdvice` global handler
-- Testing: JUnit 5 + AssertJ + Mockito. Name: `method_scenario_expected`
+- Testing: JUnit 5 + AssertJ + Mockito + `@ExtendWith(MockitoExtension.class)`. Name: `method_scenario_expected`
 - Structured logging: `key=value` format + MDC for traceId/userId
+
+### Spring-specific
+- **Constructor injection only** — never `@Autowired` on fields; use `@RequiredArgsConstructor` + `final`
+- **`@ConfigurationProperties`** for grouped config — avoid scattered `@Value`
+- `@Transactional`: default `REQUIRED`; use `REQUIRES_NEW` for audit/notification; never call via `this.`
+- `@Transactional(readOnly = true)` for pure reads; always set `rollbackFor = Exception.class` for checked exceptions
+- `@Async`: must configure custom `ThreadPoolTaskExecutor`; method must be `public` and called from another bean
+- Pagination: always use physical SQL `LIMIT`/`OFFSET` or PageHelper, never in-memory subset
+- **Avoid N+1**: batch sub-queries with `WHERE id IN (...)`, never query inside a loop
+- **Test slices**: `@WebMvcTest` for controllers, `@DataJpaTest` for repos — avoid full `@SpringBootTest` unless needed
+
+### Java 17 language features
+- `sealed` + `record` for closed type hierarchies — enables exhaustive `switch`
+- Pattern matching `instanceof` — eliminates redundant casts
+- Text blocks for multiline SQL/JSON (especially in tests)
+- Switch expressions over switch statements — no fall-through, compiler-exhaustive
+
+### Effective Java supplements
+- **Return empty collection, not null** — `Collections.emptyList()` / `new T[0]`, never `null`
+- **Builder for 4+ params** — `@Builder` (Lombok) or manual; validate in `build()`
+- **Composition over inheritance** — wrap and delegate; only extend on true is-a + controlled superclass
+- **Enum best practices** — carry data/behavior in enum; `EnumMap`/`EnumSet`; never use `ordinal()` as stored value
+- **Exception translation** — translate per layer (DAO→`RepositoryException`, Service→`ServiceException`); always chain cause
 
 ## Full Reference
 
 **Core rules (P3C 阿里巴巴Java开发手册):**
 → `references/guidelines.md`
 
-**Modern Java supplement (Record/Optional/Stream/Testing/Exception design):**
+**Modern Java supplement (Record/Optional/Stream/Spring/Effective Java/Java 17):**
 → `references/modern-java.md`
 
 ## How to Use This Skill

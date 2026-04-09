@@ -251,11 +251,12 @@
 2. **[Mandatory]** POJO boolean → `isXxx`, DB column → `is_xxx`. ORM mapping must handle this mismatch.
 3. **[Mandatory]** No `resultClass` as return for query in XML config. Use `resultMap` for column-field mapping.
 4. **[Mandatory]** Beware of `#{}` vs `${}`. Use `#{}` to prevent SQL injection. `${}` is string replacement.
-5. **[Mandatory]** iBATIS `queryForList(xxx, start, pageSize)` doesn't use stored proc pagination. It fetches all then subsets in memory. Use physical pagination in SQL.
+5. **[Mandatory]** Use physical pagination in SQL (e.g. `LIMIT #{offset}, #{pageSize}`). Never rely on in-memory pagination. For MyBatis 3.x, use PageHelper or hand-write `LIMIT`/`OFFSET` in the mapper XML.
 6. **[Mandatory]** No `HashMap`/`Hashtable` as query result type.
 7. **[Mandatory]** `gmt_modified` must be updated with data changes.
 8. **[Recommended]** Don't write large complex SQL. Break into smaller queries. Don't compute in DB what app can compute.
 9. **[Recommended]** Don't use `@Transactional` too broadly. Scope transactions to necessary operations only. Consider network calls, search engine, MQ interactions.
+10. **[Mandatory]** Avoid N+1 queries. When loading a list of entities that each require a sub-query, use a single batch query or JOIN instead of querying inside a loop. e.g. fetch all related items in one `WHERE id IN (...)` query, not one query per parent row.
 
 ---
 
@@ -288,8 +289,7 @@ Domain models per layer:
 
 ### Server Specification
 
-1. **[Recommended]** Reduce TCP `time_wait` for high-concurrency servers
-2. **[Recommended]** Increase max file descriptors (default 1024 is too low for high concurrency)
+> Note: TCP tuning and OS-level file descriptor limits are infrastructure/ops concerns. Configure these at the deployment level (e.g., systemd unit files, container resource limits), not in application code.
 
 ---
 
