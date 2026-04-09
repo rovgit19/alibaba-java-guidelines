@@ -1,13 +1,9 @@
 ---
 name: alibaba-java-guidelines
 description: >
-  Alibaba Java Coding Guidelines (阿里巴巴Java开发手册/P3C) for writing production-quality Java code.
-  Use this skill whenever writing, reviewing, or refactoring Java code — including Spring Boot services,
-  MyBatis/MyBatis-Plus mappers, POJO/DTO/VO definitions, MySQL schema design, REST APIs, or any Java
-  backend work. Also trigger when the user asks about Java coding standards, naming conventions, 
-  concurrency best practices, collection pitfalls, exception handling patterns, SQL/ORM rules, or 
-  mentions "P3C", "阿里规约", "阿里巴巴开发手册", or "coding guidelines". Even if the user doesn't 
-  explicitly ask for standards compliance, apply these rules when generating or reviewing Java code.
+  Alibaba Java Coding Guidelines (P3C / 阿里规约 / 黄山版).
+  Apply when writing, reviewing, or refactoring Java code, Spring Boot services,
+  MyBatis mappers, MySQL schema, or when user mentions "P3C" / "阿里规约" / "coding guidelines".
 ---
 
 # Alibaba Java Coding Guidelines Skill
@@ -98,14 +94,19 @@ Before reading the full reference, internalize these high-impact rules:
 
 ## How to Use This Skill
 
-1. **When writing code**: Apply rules from the Quick Reference above by default.
-   Consult `references/guidelines.md` for specific sections when uncertain.
+**When this skill is invoked, read both reference files before responding:**
+- `references/guidelines.md` — P3C core rules
+- `references/modern-java.md` — Modern Java / Spring supplement
+
+This ensures complete rule coverage. The skill is loaded once per session, so the cost is paid once.
+
+1. **When writing code**: Apply rules from both references. Quick Reference above is a fast lookup aid.
 
 2. **When reviewing code**: Check against [Mandatory] rules first. Flag violations
    with the rule reference (e.g. "Naming Rule #8: Boolean fields should not use `is` prefix").
 
-3. **When the user asks about standards**: Cite specific rules from the guidelines
-   with examples. Mention severity level ([Mandatory] vs [Recommended] vs [For Reference]).
+3. **When the user asks about specific standards**: Cite the exact rule with severity level
+   ([Mandatory] / [Recommended] / [For Reference]).
 
-4. **Priority**: [Mandatory] rules must always be followed. [Recommended] rules should
-   be followed unless there's a specific reason not to. [For Reference] rules are suggestions.
+4. **Priority**: [Mandatory] must always be followed. [Recommended] should be followed unless
+   there's a specific reason not to. [For Reference] are suggestions.
